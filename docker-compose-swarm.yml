@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+  server:
+    image: ealen/echo-server
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: any
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+networks:
+  default:
+    external:
+      name: npm_default
