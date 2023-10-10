@@ -14,29 +14,7 @@ pipeline {
         SOURCE_REPO_URL = "https://github.com/rdnsx/${DOMAIN}.git"
         DOCKER_IMAGE_NAME = "rdnsx/${STACK_NAME}"
     }
-    
-    stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main', url: env.SOURCE_REPO_URL
-            }
-        }
-        
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    def buildNumber = env.BUILD_NUMBER
-                    docker.withRegistry('', DOCKER_HUB_CREDENTIALS) {
-                        def dockerImage = docker.build("${DOCKER_IMAGE_NAME}:${buildNumber}", ".")
-                        dockerImage.push()
-
-                        dockerImage.tag("latest")
-                        dockerImage.push("latest")
-                    }
-                }
-            }
-        }
-        
+      
         stage('Deploy to Swarm') {
             steps {
                 script {
